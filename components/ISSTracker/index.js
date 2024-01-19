@@ -10,6 +10,7 @@ export default function ISSTracker() {
     data: issPosition,
     error,
     isLoading,
+    mutate,
   } = useSWR(URL, fetcher, { refreshInterval: 5000 });
 
   if (isLoading) {
@@ -20,41 +21,13 @@ export default function ISSTracker() {
     return <h1>ISS position cannot be found: {error.message}</h1>;
   }
 
-  /* const [coords, setCoords] = useState({
-    longitude: 0,
-    latitude: 0,
-  });
-
-  async function getISSCoords() {
-    try {
-      const response = await fetch(URL);
-      if (response.ok) {
-        const data = await response.json();
-        setCoords({ longitude: data.longitude, latitude: data.latitude });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      getISSCoords();
-    }, 5000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []); 
-  */
-
   return (
     <main>
       <Map longitude={issPosition.longitude} latitude={issPosition.latitude} />
       <Controls
         longitude={issPosition.longitude}
         latitude={issPosition.latitude}
-        // onRefresh={getISSCoords}
+        onRefresh={() => mutate()}
       />
     </main>
   );
